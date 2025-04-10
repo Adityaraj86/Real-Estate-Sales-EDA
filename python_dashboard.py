@@ -42,7 +42,8 @@ print("\nPRICE_SQFT Statistics:")
 print(df['PRICE_SQFT'].describe())
 
 # Remove outliers using IQR
-
+Q1 = df['PRICE_SQFT'].quantile(0.25)
+Q3 = df['PRICE_SQFT'].quantile(0.75)
 IQR = Q3 - Q1
 filtered_df = df[(df['PRICE_SQFT'] >= Q1 - 1.5 * IQR) & (df['PRICE_SQFT'] <= Q3 + 1.5 * IQR)]
 
@@ -152,9 +153,9 @@ model = LinearRegression()
 model.fit(X_train, y_train)
 
 # Predict for AREA = 850 sqft
-normalized_area = scaler.transform([[850, 0]])[0][0]
-predicted_price_normalized = model.predict(pd.DataFrame({'AREA': [normalized_area]}))
-print(f"\nPredicted Price per Unit Area for AREA = 850 sqft (Normalized): {predicted_price_normalized[0][0]:.4f}")
+normalized_area = pd.DataFrame({'AREA':[850]})
+predicted_price_normalized = model.predict(pd.DataFrame(normalized_area))
+print("\nPredicted Price per Unit Area for AREA = 850 sqft (Normalized): ",predicted_price_normalized)
 
 # Regression line
 plt.scatter(X, y, color='skyblue', label='Data')
